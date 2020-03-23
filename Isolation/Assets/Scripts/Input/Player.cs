@@ -5,16 +5,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
-
-    private void Start()
-    {
-
-    }
+    private float speed = 10;
 
     public void Move(float x, float y)
     {
-       transform.Translate(new Vector3(x * speed * Time.deltaTime, y * speed * Time.deltaTime));
+       transform.Translate(new Vector3(x * speed * Time.deltaTime, 0, y * speed * Time.deltaTime));
     }
 
     public void Attack()

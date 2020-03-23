@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack : Command
+public class Attack : PlayerCommand
 {
     public Player Player;
 

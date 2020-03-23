@@ -4,20 +4,29 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    Move c_Move;
-    Attack c_Attack;
+    //PlayerCommands
+    Move pc_Move;
+    Attack pc_Attack;
+
+    //ButtonCommands
+    ToggleDebug bc_Toggle;
 
     Player player;
+    IButtonListener panelListener;
 
     private void Start()
     {
-        c_Move = new Move();
-        c_Attack = new Attack();
+        pc_Move = new Move();
+        pc_Attack = new Attack();
+        bc_Toggle = new ToggleDebug();
 
         player = GetComponent<Player>();
 
-        c_Move.Player = player;
-        c_Attack.Player = player;
+        panelListener = GameObject.FindGameObjectWithTag("DebugPanel").GetComponent<IButtonListener>();//find the listener on the debug panel
+
+        pc_Move.Player = player;
+        pc_Attack.Player = player;
+        bc_Toggle.Listener = panelListener;
 
         SetCommandNames();
     }
@@ -25,10 +34,31 @@ public class InputHandler : MonoBehaviour
     private void Update()
     {
         Move();
+        Attack();
+        ToggleDebugPanel();
+    }
 
-        if (Input.GetButtonDown(c_Attack.Name))
+    private void SetCommandNames()
+    {
+        pc_Move.XName = "Horizontal";
+        pc_Move.YName = "Vertical";
+        pc_Attack.Name = "Attack";
+        bc_Toggle.Name = "Toggle";
+    }
+
+    private void ToggleDebugPanel()
+    {
+        if (Input.GetButtonDown(bc_Toggle.Name))
         {
-            c_Attack.Execute(player);
+            bc_Toggle.Execute();
+        }
+    }
+
+    private void Attack()
+    {
+        if (Input.GetButtonDown(pc_Attack.Name))
+        {
+            pc_Attack.Execute(player);
         }
     }
 
@@ -37,13 +67,7 @@ public class InputHandler : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        c_Move.Execute(player, Input.GetAxis(c_Move.XName), Input.GetAxis(c_Move.YName));
+        pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
     }
 
-    void SetCommandNames()
-    {
-        c_Move.XName = "Horizontal";
-        c_Move.YName = "Vertical";
-        c_Attack.Name = "Attack";
-    }
 }

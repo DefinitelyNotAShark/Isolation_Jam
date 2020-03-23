@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Command
+public abstract class PlayerCommand
 {
     public string Name;
     public abstract void Execute(Player player);

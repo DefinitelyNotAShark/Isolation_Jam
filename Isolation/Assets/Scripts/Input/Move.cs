@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : Command
+public class Move : PlayerCommand
 {
     public string XName, YName;
     public Player Player;
