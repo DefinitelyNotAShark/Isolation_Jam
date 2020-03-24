@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float speed = 10;
+    [SerializeField] private float walkingSpeed = 5, runningSpeed = 10;
 
     [HideInInspector] public AudioManager audio;
 
@@ -17,7 +17,15 @@ public class Player : MonoBehaviour
 
     public void Move(float x, float y)
     {
-        transform.Translate(dir(x, y) * speed * Time.deltaTime);
+        Vector3 moveDir = dir(x, y);
+        transform.rotation = Quaternion.LookRotation(moveDir);
+
+        transform.Translate(moveDir * walkingSpeed * Time.deltaTime, Space.World);
+    }
+
+    public void Run(float x, float y)
+    {
+        transform.Translate(dir(x, y) * runningSpeed * Time.deltaTime);
         debugScreen.DisplayText(dir(x, y).ToString());
     }
 

@@ -15,6 +15,8 @@ public class InputHandler : MonoBehaviour
     Player player;
     IButtonListener panelListener;
 
+   private Animator anim;
+
     private void Start()
     {
         pc_Move = new Move();
@@ -23,6 +25,7 @@ public class InputHandler : MonoBehaviour
         bc_Toggle = new ToggleDebug();
 
         player = GetComponent<Player>();
+        anim = player.GetComponent<Animator>();
 
         panelListener = GameObject.FindGameObjectWithTag("DebugPanel").GetComponent<IButtonListener>();//find the listener on the debug panel
 
@@ -83,7 +86,12 @@ public class InputHandler : MonoBehaviour
         if (Input.GetButton(pc_Move.XName) || Input.GetButton(pc_Move.YName))//if any of the move buttons are being pressed
         {
             pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
+
+            anim.SetBool("Idle", false);
+        }
+        else
+        {
+            anim.SetBool("Idle", true);
         }
     }
-
 }

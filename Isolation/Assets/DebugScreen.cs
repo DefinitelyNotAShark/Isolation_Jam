@@ -12,6 +12,7 @@ public class DebugScreen : MonoBehaviour, IButtonListener
     {
         panel = gameObject;
         Text = GetComponentInChildren<TextMeshProUGUI>();
+        HidePanel();
     }
 
     public void DisplayText(string text)
