@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float walkingSpeed = 5, runningSpeed = 10;
+    [HideInInspector] private AudioManager audio;
 
-    [HideInInspector] public AudioManager audio;
-
+    [SerializeField] private float speed = 3, dashSpeed = 6, dashDuration = .5f;
     [SerializeField] private DebugScreen debugScreen;
+
+    [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
+
+    private bool canDash;
+    private Gun gun;
 
     private void Start()
     {
         audio = AudioManager.instance;
+        gun = GetComponentInChildren<Gun>();
     }
 
     public void Move(float x, float y)
@@ -20,18 +25,34 @@ public class Player : MonoBehaviour
         Vector3 moveDir = dir(x, y);
         transform.rotation = Quaternion.LookRotation(moveDir);
 
-        transform.Translate(moveDir * walkingSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
     }
 
-    public void Run(float x, float y)
+    public void Dash()
     {
-        transform.Translate(dir(x, y) * runningSpeed * Time.deltaTime);
-        debugScreen.DisplayText(dir(x, y).ToString());
+        if (canDash)
+            StartCoroutine(DashCoroutine());
+    }
+
+    private IEnumerator DashCoroutine()
+    {
+        debugScreen.DisplayText("Dash!");
+        canDash = false;
+
+        for (float f = 0; f < dashDuration; f += Time.deltaTime)
+        {
+            transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        canDash = true;
+        debugScreen.DisplayText("");
     }
 
     public void GunAttack()
     {
         audio.PlaySound("Shoot");
+        gun.Shoot();
     }
 
     public void SwordAttack()
