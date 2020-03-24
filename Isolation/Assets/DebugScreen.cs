@@ -5,12 +5,18 @@ using UnityEngine;
 
 public class DebugScreen : MonoBehaviour, IButtonListener
 {
-    private TextMeshPro debugText;
-    private GameObject panel, debugTextInstance;
+    private GameObject panel;
+    private TextMeshProUGUI Text;
 
     private void Start()
     {
         panel = gameObject;
+        Text = GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    public void DisplayText(string text)
+    {
+        Text.text = text;
     }
 
     void ShowPanel()
@@ -20,12 +26,6 @@ public class DebugScreen : MonoBehaviour, IButtonListener
     void HidePanel()
     {
         panel.SetActive(false);
-    }
-
-    public void DisplayText(string text)
-    {
-        debugTextInstance = Instantiate(new GameObject(), this.gameObject.transform);
-        debugTextInstance.AddComponent<TextMeshPro>().text = text;//add text component with the text of "TEXT"
     }
 
     /// <summary>

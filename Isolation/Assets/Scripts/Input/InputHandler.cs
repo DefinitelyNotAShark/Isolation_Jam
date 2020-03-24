@@ -6,7 +6,8 @@ public class InputHandler : MonoBehaviour
 {
     //PlayerCommands
     Move pc_Move;
-    Attack pc_Attack;
+    GunAttack pc_GunAttack;
+    SwordAttack pc_SwordAttack;
 
     //ButtonCommands
     ToggleDebug bc_Toggle;
@@ -17,7 +18,8 @@ public class InputHandler : MonoBehaviour
     private void Start()
     {
         pc_Move = new Move();
-        pc_Attack = new Attack();
+        pc_GunAttack = new GunAttack();
+        pc_SwordAttack = new SwordAttack();
         bc_Toggle = new ToggleDebug();
 
         player = GetComponent<Player>();
@@ -25,7 +27,8 @@ public class InputHandler : MonoBehaviour
         panelListener = GameObject.FindGameObjectWithTag("DebugPanel").GetComponent<IButtonListener>();//find the listener on the debug panel
 
         pc_Move.Player = player;
-        pc_Attack.Player = player;
+        pc_GunAttack.Player = player;
+        pc_SwordAttack.Player = player;
         bc_Toggle.Listener = panelListener;
 
         SetCommandNames();
@@ -34,7 +37,8 @@ public class InputHandler : MonoBehaviour
     private void Update()
     {
         Move();
-        Attack();
+        GunAttack();
+        SwordAttack();
         ToggleDebugPanel();
     }
 
@@ -42,7 +46,8 @@ public class InputHandler : MonoBehaviour
     {
         pc_Move.XName = "Horizontal";
         pc_Move.YName = "Vertical";
-        pc_Attack.Name = "Attack";
+        pc_SwordAttack.Name = "Slash";
+        pc_GunAttack.Name = "Shoot";
         bc_Toggle.Name = "Toggle";
     }
 
@@ -54,11 +59,19 @@ public class InputHandler : MonoBehaviour
         }
     }
 
-    private void Attack()
+    private void GunAttack()
     {
-        if (Input.GetButtonDown(pc_Attack.Name))
+        if (Input.GetButtonDown(pc_GunAttack.Name))
         {
-            pc_Attack.Execute(player);
+            pc_GunAttack.Execute(player);
+        }
+    }
+
+    private void SwordAttack()
+    {
+        if (Input.GetButtonDown(pc_SwordAttack.Name))
+        {
+            pc_SwordAttack.Execute(player);
         }
     }
 
@@ -67,7 +80,10 @@ public class InputHandler : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
+        if (Input.GetButton(pc_Move.XName) || Input.GetButton(pc_Move.YName))//if any of the move buttons are being pressed
+        {
+            pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
+        }
     }
 
 }
