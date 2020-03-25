@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Dash : PlayerCommand
 {
-    public Player Player;
 
     public override void Execute(Player player)
     {

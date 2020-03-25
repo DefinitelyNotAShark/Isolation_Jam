@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GunCharge : PlayerCommand
 {
-    public Player Player;
 
     public override void Execute(Player player)
     {
@@ -13,6 +12,6 @@ public class GunCharge : PlayerCommand
 
     public override void Execute(Player player, float x, float y)
     {
-        throw new System.NotImplementedException();
+        player.GunCharge(x, y);
     }
 }
