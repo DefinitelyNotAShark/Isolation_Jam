@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class InputHandler : MonoBehaviour
     GunAttack pc_GunAttack;
     SwordAttack pc_SwordAttack;
     Dash pc_Dash;
+    GunCharge pc_GunCharge;
 
     //ButtonCommands
     ToggleDebug bc_Toggle;
@@ -16,12 +18,13 @@ public class InputHandler : MonoBehaviour
     Player player;
     IButtonListener panelListener;
 
-   private Animator anim;
+    private Animator anim;
     private bool shooting = false;
 
     private void Start()
     {
         pc_Move = new Move();
+        pc_GunCharge = new GunCharge();
         pc_GunAttack = new GunAttack();
         pc_SwordAttack = new SwordAttack();
         bc_Toggle = new ToggleDebug();
@@ -37,10 +40,17 @@ public class InputHandler : MonoBehaviour
         pc_GunAttack.Player = player;
         pc_SwordAttack.Player = player;
         pc_Dash.Player = player;
+        pc_GunCharge.Player = player;
 
         bc_Toggle.Listener = panelListener;
 
         SetCommandNames();
+        SetStartingVars();
+    }
+
+    private void SetStartingVars()
+    {
+        pc_Move.CanMove = true;
     }
 
     private void Update()
@@ -76,8 +86,8 @@ public class InputHandler : MonoBehaviour
         {
             if (!shooting)
             {
+                pc_GunCharge.Execute(player);//charging
                 shooting = true;//button is pressed
-                //AUDIO PLAY CHARGING SOUND
             }
         }
         if (!Input.GetButton(pc_GunAttack.Name) && shooting)//if button not currently pressed but was last check, shoot
@@ -104,18 +114,28 @@ public class InputHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// //calls the player's move function and passes in the input values
+    /// //calls the player's move function if canMove and passes in the input values
     /// </summary>
     private void Move()
     {
+        //Can we move?
+        if (shooting)
+            pc_Move.CanMove = false;
+        else pc_Move.CanMove = true;
+
+        //Move the amount that we have input for
         if (Input.GetButton(pc_Move.XName) || Input.GetButton(pc_Move.YName))//if any of the move buttons are being pressed
         {
             pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
-            anim.SetBool("Idle", false);//moving animation
+
+            if (pc_Move.CanMove)
+                anim.SetBool("Idle", false);//moving animation
+            else
+                anim.SetBool("Idle", true);
         }
         else
         {
-            anim.SetBool("Idle", true);//idle animation
+            anim.SetBool("Idle", true);
         }
     }
 }

@@ -26,6 +26,10 @@ public class Sound
 
         source.Play();
     }
+    public void Stop()
+    {
+        source.Stop();
+    }
     public void Loop()
     {
         source.volume = volume;
@@ -69,6 +73,20 @@ public class AudioManager : MonoBehaviour
             if (sounds[i].name==_name)
             {
                 sounds[i].Play();
+                return;
+            }
+        }
+        //no sound with _name
+        Debug.LogWarning("AudioManager: Sound not found in list: " + _name);
+    }
+
+    public void StopSound(string _name)
+    {
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (sounds[i].name==_name)
+            {
+                sounds[i].Stop();
                 return;
             }
         }

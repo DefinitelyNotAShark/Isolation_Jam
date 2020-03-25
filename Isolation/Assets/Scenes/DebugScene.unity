@@ -1098,6 +1098,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3254250636157155225, guid: 6b5db3f62cc3c2746aeaf846d54e266e,
+        type: 3}
+      propertyPath: sounds.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3254250636157155225, guid: 6b5db3f62cc3c2746aeaf846d54e266e,
+        type: 3}
+      propertyPath: sounds.Array.data[4].name
+      value: Charge
+      objectReference: {fileID: 0}
+    - target: {fileID: 3254250636157155225, guid: 6b5db3f62cc3c2746aeaf846d54e266e,
+        type: 3}
+      propertyPath: sounds.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: aa7491d7ae95ccf45b0d6a33f94a9745, type: 3}
+    - target: {fileID: 3254250636157155225, guid: 6b5db3f62cc3c2746aeaf846d54e266e,
+        type: 3}
+      propertyPath: sounds.Array.data[4].volume
+      value: 0.586
+      objectReference: {fileID: 0}
+    - target: {fileID: 3254250636157155225, guid: 6b5db3f62cc3c2746aeaf846d54e266e,
+        type: 3}
+      propertyPath: sounds.Array.data[4].pitch
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 3254250636157155302, guid: 6b5db3f62cc3c2746aeaf846d54e266e,
         type: 3}
       propertyPath: m_Name

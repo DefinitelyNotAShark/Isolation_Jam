@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
 
-    private bool canDash;
+    private bool canDash = true;
     private Gun gun;
 
     private void Start()
@@ -20,12 +20,13 @@ public class Player : MonoBehaviour
         gun = GetComponentInChildren<Gun>();
     }
 
-    public void Move(float x, float y)
+    public void Move(float x, float y, bool canMove)
     {
         Vector3 moveDir = dir(x, y);
         transform.rotation = Quaternion.LookRotation(moveDir);
 
-        transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+        if (canMove)
+            transform.Translate(moveDir * speed * Time.deltaTime, Space.World);      
     }
 
     public void Dash()
@@ -51,8 +52,15 @@ public class Player : MonoBehaviour
 
     public void GunAttack()
     {
+        audio.StopSound("Charge");
         audio.PlaySound("Shoot");
         gun.Shoot();
+    }
+
+    public void GunCharge()
+    {
+        audio.PlaySound("Charge");
+        gun.Charge();
     }
 
     public void SwordAttack()

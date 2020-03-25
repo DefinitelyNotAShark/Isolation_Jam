@@ -15,6 +15,10 @@ public class Gun : MonoBehaviour
         bulletInstance = Instantiate(bulletPrefab, this.transform.position, this.transform.rotation);//spawn bullet at the spawn point
         SetBulletValues(bulletInstance);//set all bullet variables
     }
+    public void Charge()
+    {
+        //play charge particles
+    }
 
     private void SetBulletValues(GameObject bulletInstance)
     {
