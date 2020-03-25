@@ -11,6 +11,7 @@ public class InputHandler : MonoBehaviour
     SwordAttack pc_SwordAttack;
     Dash pc_Dash;
     GunCharge pc_GunCharge;
+    Idle pc_Idle;
 
     //ButtonCommands
     ToggleDebug bc_Toggle;
@@ -18,12 +19,13 @@ public class InputHandler : MonoBehaviour
     Player player;
     IButtonListener panelListener;
 
-    private Animator anim;
     private bool shooting = false;
+    private float shootTimer, shootMinWaitTime = .567f;//the length of the charge animation//wait until the gun is moved upwards to shoot
 
     private void Start()
     {
         pc_Move = new Move();
+        pc_Idle = new Idle();
         pc_GunCharge = new GunCharge();
         pc_GunAttack = new GunAttack();
         pc_SwordAttack = new SwordAttack();
@@ -31,26 +33,12 @@ public class InputHandler : MonoBehaviour
         pc_Dash = new Dash();
 
         player = GetComponent<Player>();
-        anim = player.GetComponent<Animator>();
 
         panelListener = GameObject.FindGameObjectWithTag("DebugPanel").GetComponent<IButtonListener>();//find the listener on the debug panel
-
-        //set the player
-        pc_Move.Player = player;
-        pc_GunAttack.Player = player;
-        pc_SwordAttack.Player = player;
-        pc_Dash.Player = player;
-        pc_GunCharge.Player = player;
 
         bc_Toggle.Listener = panelListener;
 
         SetCommandNames();
-        SetStartingVars();
-    }
-
-    private void SetStartingVars()
-    {
-        pc_Move.CanMove = true;
     }
 
     private void Update()
@@ -58,8 +46,19 @@ public class InputHandler : MonoBehaviour
         Move();
         Dash();
         GunAttack();
+        GunHoldCheck();
         SwordAttack();
         ToggleDebugPanel();
+    }
+
+    private void GunHoldCheck()
+    {
+        //Can we move?
+        if (shooting)
+        {
+            pc_GunCharge.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));//rotate while charging
+            shootTimer += Time.deltaTime;
+        }
     }
 
     private void SetCommandNames()
@@ -86,14 +85,18 @@ public class InputHandler : MonoBehaviour
         {
             if (!shooting)
             {
-                pc_GunCharge.Execute(player);//charging
+                pc_GunCharge.Execute(player);//charging start
                 shooting = true;//button is pressed
             }
         }
         if (!Input.GetButton(pc_GunAttack.Name) && shooting)//if button not currently pressed but was last check, shoot
         {
-            pc_GunAttack.Execute(player);
-            shooting = false;//update press check
+            if (shootTimer >= shootMinWaitTime)//make sure the windup animation has played
+            {
+                shootTimer = 0;//reset timer
+                pc_GunAttack.Execute(player);//shoot
+                shooting = false;//update press check
+            }
         }
     }
 
@@ -118,24 +121,14 @@ public class InputHandler : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        //Can we move?
-        if (shooting)
-            pc_Move.CanMove = false;
-        else pc_Move.CanMove = true;
-
         //Move the amount that we have input for
-        if (Input.GetButton(pc_Move.XName) || Input.GetButton(pc_Move.YName))//if any of the move buttons are being pressed
+        if ((Input.GetButton(pc_Move.XName) || Input.GetButton(pc_Move.YName)) && !shooting)//if any of the move buttons are being pressed
         {
             pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
-
-            if (pc_Move.CanMove)
-                anim.SetBool("Idle", false);//moving animation
-            else
-                anim.SetBool("Idle", true);
         }
-        else
+        else if(!shooting)
         {
-            anim.SetBool("Idle", true);
+            pc_Idle.Execute(player);
         }
     }
 }

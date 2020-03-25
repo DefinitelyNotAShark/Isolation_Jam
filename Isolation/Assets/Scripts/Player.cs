@@ -4,29 +4,37 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [HideInInspector] private AudioManager audio;
+    [HideInInspector] public bool CanMove = true;
 
     [SerializeField] private float speed = 3, dashSpeed = 6, dashDuration = .5f;
     [SerializeField] private DebugScreen debugScreen;
-
     [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
 
     private bool canDash = true;
+    private AudioManager audio;
     private Gun gun;
+    private Animator anim;
 
     private void Start()
     {
+        anim = GetComponent<Animator>();
         audio = AudioManager.instance;
         gun = GetComponentInChildren<Gun>();
     }
 
-    public void Move(float x, float y, bool canMove)
+    public void Move(float x, float y)
     {
         Vector3 moveDir = dir(x, y);
-        transform.rotation = Quaternion.LookRotation(moveDir);
 
-        if (canMove)
-            transform.Translate(moveDir * speed * Time.deltaTime, Space.World);      
+        anim.SetBool("Idle", false);
+        transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+
+        transform.rotation = Quaternion.LookRotation(moveDir);
+    }
+
+    public void Idle()
+    {
+        anim.SetBool("Idle", true);
     }
 
     public void Dash()
@@ -37,7 +45,6 @@ public class Player : MonoBehaviour
 
     private IEnumerator DashCoroutine()
     {
-        debugScreen.DisplayText("Dash!");
         canDash = false;
 
         for (float f = 0; f < dashDuration; f += Time.deltaTime)
@@ -47,19 +54,26 @@ public class Player : MonoBehaviour
         }
 
         canDash = true;
-        debugScreen.DisplayText("");
     }
 
     public void GunAttack()
     {
         audio.StopSound("Charge");
         audio.PlaySound("Shoot");
+        anim.SetTrigger("ReleaseTrigger");
         gun.Shoot();
     }
 
-    public void GunCharge()
+    public void GunCharge(float x, float y)//holding down the button
+    {
+        Vector3 moveDir = dir(x, y);
+        transform.rotation = Quaternion.LookRotation(moveDir);
+    }
+
+    public void GunCharge()//first time the button is down
     {
         audio.PlaySound("Charge");
+        anim.SetTrigger("Charging");
         gun.Charge();
     }
 

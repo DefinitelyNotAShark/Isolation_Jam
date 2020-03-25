@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c508242e081d35448af6f50c4c8618ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanMove: 1
   speed: 2
   dashSpeed: 6
   dashDuration: 0.5
@@ -446,7 +447,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 51d3ac1809378cb449daba5ffc7aeab0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 51d3ac1809378cb449daba5ffc7aeab0,
         type: 3}

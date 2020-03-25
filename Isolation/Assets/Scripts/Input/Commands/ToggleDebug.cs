@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ToggleDebug : ButtonCommand
 {
+
     public void Execute()
     {
         Listener.Execute();
