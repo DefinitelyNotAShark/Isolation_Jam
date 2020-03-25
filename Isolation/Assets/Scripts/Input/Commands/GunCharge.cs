@@ -12,6 +12,6 @@ public class GunCharge : PlayerCommand
 
     public override void Execute(Player player, float x, float y)
     {
-        player.GunCharge(x, y);
+        throw new System.NotImplementedException();
     }
 }

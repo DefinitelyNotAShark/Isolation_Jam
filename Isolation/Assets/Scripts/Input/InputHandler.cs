@@ -11,7 +11,7 @@ public class InputHandler : MonoBehaviour
     SwordAttack pc_SwordAttack;
     Dash pc_Dash;
     GunCharge pc_GunCharge;
-    Idle pc_Idle;
+    Interact pc_Interact;
 
     //ButtonCommands
     ToggleDebug bc_Toggle;
@@ -20,17 +20,17 @@ public class InputHandler : MonoBehaviour
     IButtonListener panelListener;
 
     private bool shooting = false;
-    private float shootTimer, shootMinWaitTime = .567f;//the length of the charge animation//wait until the gun is moved upwards to shoot
+    private float shootTimer, shootMinWaitTime = .667f;//the length of the charge animation//wait until the gun is moved upwards to shoot
 
     private void Start()
     {
         pc_Move = new Move();
-        pc_Idle = new Idle();
         pc_GunCharge = new GunCharge();
         pc_GunAttack = new GunAttack();
         pc_SwordAttack = new SwordAttack();
         bc_Toggle = new ToggleDebug();
         pc_Dash = new Dash();
+        pc_Interact = new Interact();
 
         player = GetComponent<Player>();
 
@@ -46,19 +46,12 @@ public class InputHandler : MonoBehaviour
         Move();
         Dash();
         GunAttack();
-        GunHoldCheck();
         SwordAttack();
         ToggleDebugPanel();
-    }
+        Interact();
 
-    private void GunHoldCheck()
-    {
-        //Can we move?
         if (shooting)
-        {
-            pc_GunCharge.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));//rotate while charging
             shootTimer += Time.deltaTime;
-        }
     }
 
     private void SetCommandNames()
@@ -69,6 +62,7 @@ public class InputHandler : MonoBehaviour
         pc_SwordAttack.Name = "Slash";
         pc_GunAttack.Name = "Shoot";
         bc_Toggle.Name = "Toggle";
+        pc_Interact.Name = "Interact";
     }
 
     private void ToggleDebugPanel()
@@ -121,14 +115,14 @@ public class InputHandler : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        //Move the amount that we have input for
-        if ((Input.GetButton(pc_Move.XName) || Input.GetButton(pc_Move.YName)) && !shooting)//if any of the move buttons are being pressed
+        pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
+    }
+
+    private void Interact()
+    {
+        if (Input.GetButtonDown(pc_Interact.Name))
         {
-            pc_Move.Execute(player, Input.GetAxis(pc_Move.XName), Input.GetAxis(pc_Move.YName));
-        }
-        else if(!shooting)
-        {
-            pc_Idle.Execute(player);
+            pc_Interact.Execute(player);
         }
     }
 }

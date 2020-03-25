@@ -6,18 +6,17 @@ using UnityEngine;
 public class DebugScreen : MonoBehaviour, IButtonListener
 {
     private GameObject panel;
-    private TextMeshProUGUI Text;
+    private TextMeshProUGUI[] Text;
 
     private void Start()
     {
         panel = gameObject;
-        Text = GetComponentInChildren<TextMeshProUGUI>();
-        HidePanel();
+        Text = GetComponentsInChildren<TextMeshProUGUI>();
     }
 
-    public void DisplayText(string text)
+    public void DisplayText(string text, int i)
     {
-        Text.text = text;
+        Text[i].text = text;
     }
 
     void ShowPanel()

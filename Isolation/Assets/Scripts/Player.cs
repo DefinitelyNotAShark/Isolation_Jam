@@ -4,81 +4,97 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [HideInInspector] public bool CanMove = true;
-
     [SerializeField] private float speed = 3, dashSpeed = 6, dashDuration = .5f;
     [SerializeField] private DebugScreen debugScreen;
     [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
 
-    private bool canDash = true;
     private AudioManager audio;
     private Gun gun;
-    private Animator anim;
+    private PlayerStateMachine state;
+    private bool canDash;
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        state = GetComponent<PlayerStateMachine>();
         audio = AudioManager.instance;
         gun = GetComponentInChildren<Gun>();
     }
 
     public void Move(float x, float y)
     {
-        Vector3 moveDir = dir(x, y);
+        debugScreen.DisplayText("Move Input: ( " + x.ToString() + ", " + y.ToString() + " )", 1);
 
-        anim.SetBool("Idle", false);
-        transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+        //if can rotate
+        if (state.CanRotate)
+        {     
+            //if no move input, go idle
+            if (Mathf.Abs(x) < .1f && Mathf.Abs(y) < .1f && !state.Charging)//if our input is so small, it doens't pick up movement and we're not charging a gun
+            {
+                state.SetState(State.idle);
+            }
+            //otherwise if can move, move
+            else if(state.CanMove == true)
+            {
+                //rotate
+                Vector3 moveDir = dir(x, y);
+                transform.rotation = Quaternion.LookRotation(moveDir);
 
-        transform.rotation = Quaternion.LookRotation(moveDir);
+                //move
+                transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+                state.SetState(State.walking);
+            }
+            else
+            {
+                //rotate
+                Vector3 moveDir = dir(x, y);
+                transform.rotation = Quaternion.LookRotation(moveDir);
+            }      
+        }
     }
 
-    public void Idle()
+    public void Interact()
     {
-        anim.SetBool("Idle", true);
+        state.SetState(State.interacting);
     }
 
     public void Dash()
     {
         if (canDash)
+        {
+            state.SetState(State.dashing);
             StartCoroutine(DashCoroutine());
+        }
     }
 
     private IEnumerator DashCoroutine()
     {
         canDash = false;
-
         for (float f = 0; f < dashDuration; f += Time.deltaTime)
         {
             transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
-
         canDash = true;
     }
 
     public void GunAttack()
     {
+        state.SetState(State.firingGun);
         audio.StopSound("Charge");
         audio.PlaySound("Shoot");
-        anim.SetTrigger("ReleaseTrigger");
         gun.Shoot();
-    }
-
-    public void GunCharge(float x, float y)//holding down the button
-    {
-        Vector3 moveDir = dir(x, y);
-        transform.rotation = Quaternion.LookRotation(moveDir);
     }
 
     public void GunCharge()//first time the button is down
     {
+        state.SetState(State.chargingGun);
         audio.PlaySound("Charge");
-        anim.SetTrigger("Charging");
         gun.Charge();
     }
 
     public void SwordAttack()
     {
+        state.SetState(State.slashing);
         audio.PlaySound("Slash");
     }
 
