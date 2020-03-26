@@ -25,31 +25,29 @@ public class Player : MonoBehaviour
         debugScreen.DisplayText("Move Input: ( " + x.ToString() + ", " + y.ToString() + " )", 1);
 
         //if can rotate
-        if (state.CanRotate)
-        {     
-            //if no move input, go idle
-            if (Mathf.Abs(x) < .1f && Mathf.Abs(y) < .1f && !state.Charging)//if our input is so small, it doens't pick up movement and we're not charging a gun
-            {
-                state.SetState(State.idle);
-            }
-            //otherwise if can move, move
-            else if(state.CanMove == true)
-            {
-                //rotate
-                Vector3 moveDir = dir(x, y);
-                transform.rotation = Quaternion.LookRotation(moveDir);
+        if (state.CanRotate == true)
+        {
+            //rotate  
+            Vector3 moveDir = dir(x, y);
 
-                //move
-                transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
-                state.SetState(State.walking);
-            }
-            else
+            //otherwise if can move, move
+            if (state.CanMove == true)
             {
-                //rotate
-                Vector3 moveDir = dir(x, y);
-                transform.rotation = Quaternion.LookRotation(moveDir);
-            }      
+                //move if there's input
+                if (moveDir != Vector3.zero)
+                {
+                    transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+                    state.SetState(State.walking);
+                }
+                else if (state.GetState() == State.walking)//if we were walking and now we aren't
+                {
+                    state.ReturnToIdle();//go idle
+                }
+            }        
+            if(moveDir != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(moveDir);
         }
+        
     }
 
     public void Interact()

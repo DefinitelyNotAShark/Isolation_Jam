@@ -20,12 +20,16 @@ public class PlayerStateMachine : MonoBehaviour
 
     [HideInInspector] public bool CanMove;
     [HideInInspector] public bool CanRotate;
-    [HideInInspector] public bool Charging;
 
     private State PlayerState;
     private Animator anim;
+
+    private bool charging = false;
     private bool IsMoving;
 
+    private bool slashed = false;
+    private bool fired = false;
+    private bool interacted = false;
 
     private void Start()
     {
@@ -39,28 +43,46 @@ public class PlayerStateMachine : MonoBehaviour
         switch (PlayerState)
         {
             case State.chargingGun:
-                if (!Charging)
+
+                if (!charging)
                 {
-                    Charging = true;
+                    charging = true;
                     anim.SetTrigger("Charging");
                 }
 
+                fired = false;
                 CanMove = false;
                 CanRotate = true;
                 break;
             case State.firingGun:
-                anim.SetTrigger("ReleaseTrigger");
+
+                if (!fired)
+                {
+                    anim.SetTrigger("ReleaseTrigger");
+                    fired = true;
+                }
+
                 CanMove = false;
                 CanRotate = false;
-                Charging = false;
+                charging = false;
                 break;
             case State.idle:
                 anim.SetBool("Idle", true);
                 CanMove = true;
                 CanRotate = true;
+
+                //reset bools 
+                fired = false;
+                interacted = false;
+                slashed = false;
+
                 break;
             case State.interacting:
-                anim.SetTrigger("Interact");
+                if (!interacted)
+                {
+                    anim.SetTrigger("Interacting");
+                    interacted=true;
+                }
                 CanMove = false;
                 CanRotate = false;
                 break;
@@ -69,6 +91,11 @@ public class PlayerStateMachine : MonoBehaviour
                 CanRotate = true;
                 break;
             case State.slashing:
+                if (!slashed)
+                {
+                    anim.SetTrigger("Slashing");
+                    slashed = true;
+                }
                 CanMove = false;
                 CanRotate = false;
                 break;
@@ -85,7 +112,7 @@ public class PlayerStateMachine : MonoBehaviour
         debug.DisplayText("Can Move: " + CanMove.ToString(), 0);
         debug.DisplayText("State: " + PlayerState, 2);
 
-        if (Charging)
+        if (charging)
         {
             SetState(State.chargingGun);
         }
@@ -95,6 +122,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         PlayerState = State.idle;
     }
+
     public void SetState(State newState)
     {
         PlayerState = newState;
