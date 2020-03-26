@@ -20,7 +20,7 @@ public class InputHandler : MonoBehaviour
     IButtonListener panelListener;
 
     private bool shooting = false;
-    private float shootTimer, shootMinWaitTime = .667f;//the length of the charge animation//wait until the gun is moved upwards to shoot
+    [SerializeField] private float shootTimer, shootMinWaitTime = .667f;//the length of the charge animation//wait until the gun is moved upwards to shoot
 
     private void Start()
     {

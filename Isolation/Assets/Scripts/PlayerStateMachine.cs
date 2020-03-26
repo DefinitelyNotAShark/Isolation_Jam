@@ -33,7 +33,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
         PlayerState = State.idle;
     }
 
