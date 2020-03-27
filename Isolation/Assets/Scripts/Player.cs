@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float speed = 3, dashSpeed = 6, dashDuration = .5f;
+    [SerializeField] private float speed = 3, dashSpeed = 6, idleDashDuration = .5f, walkingDashDuration = 1.2f;
     [SerializeField] private DebugScreen debugScreen;
     [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
 
     private AudioManager audio;
     private Gun gun;
     private PlayerStateMachine state;
-    private bool canDash;
+    private bool canDash = true;
 
     private void Start()
     {
@@ -57,22 +57,32 @@ public class Player : MonoBehaviour
 
     public void Dash()
     {
+
         if (canDash)
         {
+            float dashDuration = idleDashDuration;//default idle time
+
+            if (state.GetState() == State.idle)
+                dashDuration = idleDashDuration;
+            else if (state.GetState() == State.walking)
+                dashDuration = walkingDashDuration;
+          
+            StartCoroutine(DashCoroutine(dashDuration));
             state.SetState(State.dashing);
-            StartCoroutine(DashCoroutine());
         }
     }
 
-    private IEnumerator DashCoroutine()
+    private IEnumerator DashCoroutine(float duration)
     {
         canDash = false;
-        for (float f = 0; f < dashDuration; f += Time.deltaTime)
+        for (float f = 0; f < duration; f += Time.deltaTime)
         {
             transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
         canDash = true;
+
+        state.ReturnToIdle();
     }
 
     public void GunAttack()
@@ -93,6 +103,11 @@ public class Player : MonoBehaviour
     public void SwordAttack()
     {
         state.SetState(State.slashing);
+    }
+
+    //this is called by the animation when the actual slash happens
+    public void SwordSlash()
+    {
         audio.PlaySound("Slash");
     }
 

@@ -30,6 +30,7 @@ public class PlayerStateMachine : MonoBehaviour
     private bool slashed = false;
     private bool fired = false;
     private bool interacted = false;
+    private bool dashing = false;
 
     private void Start()
     {
@@ -68,6 +69,7 @@ public class PlayerStateMachine : MonoBehaviour
                 break;
             case State.idle:
                 anim.SetBool("Idle", true);
+
                 CanMove = true;
                 CanRotate = true;
 
@@ -75,13 +77,13 @@ public class PlayerStateMachine : MonoBehaviour
                 fired = false;
                 interacted = false;
                 slashed = false;
-
+                dashing = false;
                 break;
             case State.interacting:
                 if (!interacted)
                 {
                     anim.SetTrigger("Interacting");
-                    interacted=true;
+                    interacted = true;
                 }
                 CanMove = false;
                 CanRotate = false;
@@ -105,9 +107,14 @@ public class PlayerStateMachine : MonoBehaviour
                 CanRotate = true;
                 break;
             case State.dashing:
+                if (!dashing)
+                {
+                    anim.SetTrigger("Dash");
+                    dashing = true;
+                }
                 CanMove = false;
                 CanRotate = false;
-                break;      
+                break;
         }
         debug.DisplayText("Can Move: " + CanMove.ToString(), 0);
         debug.DisplayText("State: " + PlayerState, 2);

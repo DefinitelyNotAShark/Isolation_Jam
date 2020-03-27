@@ -3006,5 +3006,25 @@ PrefabInstance:
       propertyPath: debugScreen
       value: 
       objectReference: {fileID: 1390024376}
+    - target: {fileID: 6474378688869641761, guid: ee9b8bc4511012440b7edd91fa89ee27,
+        type: 3}
+      propertyPath: dashDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474378688869641761, guid: ee9b8bc4511012440b7edd91fa89ee27,
+        type: 3}
+      propertyPath: walkingDashDuration
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474378688869641761, guid: ee9b8bc4511012440b7edd91fa89ee27,
+        type: 3}
+      propertyPath: idleDashDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474378688869641761, guid: ee9b8bc4511012440b7edd91fa89ee27,
+        type: 3}
+      propertyPath: dashSpeed
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee9b8bc4511012440b7edd91fa89ee27, type: 3}
