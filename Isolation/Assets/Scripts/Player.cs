@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
         else return false;
     }
 
-    private void Start()
+    private void Awake()
     {
         Stats = new Stats(startingHealth, startingEnergy, startingPower);
 
