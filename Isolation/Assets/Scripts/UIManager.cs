@@ -5,68 +5,44 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private Player player;
     [SerializeField] private Image healthBar, energyBar;
-    [SerializeField] private float maxHealth = 100, maxEnergy = 100;
 
-    private float healthAmount, energyAmount;
+    private Stats stats;
 
     void Start()
     {
-        healthAmount = maxHealth;
-        energyAmount = maxEnergy;
-
-        SetHealth();
-        SetEnergy();
-
+        stats = player.Stats;
+        SetUI();
     }
 
-    private void SetHealth()
-    { 
-        healthBar.fillAmount = healthAmount * .01f;
-    }
-
-    private void SetEnergy()
+    void SetUI()
     {
-        energyBar.fillAmount = energyAmount * .01f;
-    }
-
-    public void DecreaseHealth(float amount)
-    {
-        healthAmount -= amount;
-
-        if (healthAmount < 0)
-            healthAmount = 0;
-
-        SetHealth();
+        healthBar.fillAmount = stats.Health * .01f;
+        energyBar.fillAmount = stats.Energy * .01f;
     }
 
     public void AddHealth(float amount)
     {
-        healthAmount += amount;
-
-        if (healthAmount > maxHealth)
-            healthAmount = maxHealth;
-
-        SetHealth();
+        stats.AddHealth(amount);
+        SetUI();
     }
 
-    public void DecreaseEnergy(float amount)
+    public void DecreaseHealth(float amount)
     {
-        energyAmount -= amount;
-
-        if (energyAmount < 0)
-            energyAmount = 0;
-
-        SetEnergy();
+        stats.DecreaseHealth(amount);
+        SetUI();
     }
 
     public void AddEnergy(float amount)
     {
-        energyAmount += amount;
+        stats.AddEnergy(amount);
+        SetUI();
+    }
 
-        if (energyAmount > maxEnergy)
-            energyAmount = maxEnergy;
-
-        SetEnergy();
+    public void DecreaseEnergy(float amount)
+    {
+        stats.DecreaseEnergy(amount);
+        SetUI();
     }
 }

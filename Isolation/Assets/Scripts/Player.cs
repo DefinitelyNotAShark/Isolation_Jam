@@ -4,17 +4,34 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [HideInInspector] public Stats Stats;
+   
+
     [SerializeField] private float speed = 3, dashSpeed = 6, idleDashDuration = .5f, walkingDashDuration = 1.2f;
+    [SerializeField] private float startingHealth = 100, startingEnergy = 100, startingPower = 100;
     [SerializeField] private DebugScreen debugScreen;
     [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
 
     private AudioManager audio;
     private Gun gun;
     private PlayerStateMachine state;
-    private bool canDash = true;
+    private bool coroutineStarted = false;
+
+    /// <summary>
+    /// Checks if player has the energy to dash
+    /// </summary>
+    /// <returns>True if the player's energy is higher than 0</returns>
+    private bool CanDash()
+    {
+        if (Stats.Energy > 0)
+            return true;
+        else return false;
+    }
 
     private void Start()
     {
+        Stats = new Stats(startingHealth, startingEnergy, startingPower);
+
         state = GetComponent<PlayerStateMachine>();
         audio = AudioManager.instance;
         gun = GetComponentInChildren<Gun>();
@@ -58,7 +75,7 @@ public class Player : MonoBehaviour
     public void Dash()
     {
 
-        if (canDash)
+        if (CanDash() && !coroutineStarted)
         {
             float dashDuration = idleDashDuration;//default idle time
 
@@ -74,13 +91,13 @@ public class Player : MonoBehaviour
 
     private IEnumerator DashCoroutine(float duration)
     {
-        canDash = false;
+        coroutineStarted = true;
         for (float f = 0; f < duration; f += Time.deltaTime)
         {
             transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
-        canDash = true;
+        coroutineStarted = false;
 
         state.ReturnToIdle();
     }
