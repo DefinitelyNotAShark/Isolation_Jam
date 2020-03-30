@@ -64,3 +64,8 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     loop: 0
+  - name: Charge
+    clip: {fileID: 8300000, guid: aa7491d7ae95ccf45b0d6a33f94a9745, type: 3}
+    volume: 0.586
+    pitch: 1.2
+    loop: 0
