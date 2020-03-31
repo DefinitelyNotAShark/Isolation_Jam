@@ -290,3 +290,7 @@ C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\obj\Debug\Assembly-CSharp.c
 C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\obj\Debug\Assembly-CSharp.dll
 C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\obj\Debug\Assembly-CSharp.pdb
+C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.dll
+C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.Editor.dll
+C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.pdb
+C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.Editor.pdb

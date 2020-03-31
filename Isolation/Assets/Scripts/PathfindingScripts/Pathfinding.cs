@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-    //[SerializeField]
-    //private Transform startPosition;
-
-    //public Transform targetPosition;
-
     private GridManager grid;
 
 	void Start ()
@@ -17,6 +12,11 @@ public class Pathfinding : MonoBehaviour
         grid = GetComponent<GridManager>();
 	}
 
+    /// <summary>
+    /// Given start and end position, 
+    /// </summary>
+    /// <param name="startPosition"></param>
+    /// <param name="targetPosition"></param>
     public void FindPath(Vector3 startPosition, Vector3 targetPosition)
     {
         Node startNode = grid.GetNodeFromWorldPosition(startPosition);
@@ -83,17 +83,15 @@ public class Pathfinding : MonoBehaviour
     }
 
     private void GetFinalPath(Node startNode, Node endNode)
-    {
-        List<Node> FinalPath = new List<Node>();
+    { 
 
         Node currentNode = endNode;
 
         while(currentNode != startNode)
         {
-            FinalPath.Add(currentNode);
+            grid.FinalPath.Add(currentNode);
             currentNode = currentNode.parent;
         }
-        FinalPath.Reverse();
-        grid.FinalPath = FinalPath;
+        grid.FinalPath.Reverse();
     }
 }

@@ -7,10 +7,7 @@ using System;
 public class GridManager : MonoBehaviour
 {
     [HideInInspector]
-    public List<Node> FinalPath;
-
-    [SerializeField]
-    private Transform startPosition;
+    public List<Node> FinalPath = new List<Node>();
 
     [SerializeField]
     private LayerMask wallMask;
