@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericInteractiveObject : MonoBehaviour, IActivateable {
+public class GenericInteractiveObject : MonoBehaviour, IActivatable
+{
     public string NameText
     {
         get
