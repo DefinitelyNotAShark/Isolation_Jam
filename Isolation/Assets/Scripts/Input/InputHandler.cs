@@ -20,7 +20,9 @@ public class InputHandler : MonoBehaviour
     IButtonListener panelListener;
 
     private bool shooting = false;
-    [SerializeField] private float shootTimer, shootMinWaitTime = .667f;//the length of the charge animation//wait until the gun is moved upwards to shoot
+    [SerializeField] private float shootTimer, shootMinWaitTime = .334f;//the length of the charge animation//wait until the gun is moved upwards to shoot
+    [Tooltip("Attack = West, Interact = South, Dash = L Bumper, Inventory = R Bumper, Pause = Start Btn")]
+    [SerializeField] private string horiInput, vertInput, attackInput, interactInput, shootInput, dashInput, inventoryInput, pauseInput;
 
     private void Start()
     {
