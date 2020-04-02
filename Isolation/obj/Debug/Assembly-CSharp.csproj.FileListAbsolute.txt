@@ -294,3 +294,5 @@ C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGri
 C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.Editor.dll
 C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.pdb
 C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\Unity.ProGrids.Editor.pdb
+C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\DOTween.dll
+C:\Users\sophi\Desktop\Repos\Isolation_Jam\Isolation\Temp\bin\Debug\DOTween.xml

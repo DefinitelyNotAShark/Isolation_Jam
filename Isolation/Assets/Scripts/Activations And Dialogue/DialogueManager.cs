@@ -93,13 +93,6 @@ public class DialogueManager : MonoBehaviour
             {
                 DisplayNextSentence();
             }
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         characterController.enabled = !isDialogueBoxVisible;//This stops the player from moving during dialogue
@@ -108,9 +101,13 @@ public class DialogueManager : MonoBehaviour
     void OpenDialogue()
     {
         dialogueBox.DOAnchorPos(visiblePos, typingSpeed, true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
     void CloseDialogue()
     {
         dialogueBox.DOAnchorPos(offScreenPos, typingSpeed, true);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

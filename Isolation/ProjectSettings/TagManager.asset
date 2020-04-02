@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DebugPanel
   - Pathfinder
+  - PausePanel
   layers:
   - Default
   - TransparentFX

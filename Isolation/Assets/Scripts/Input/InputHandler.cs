@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
+    private IButtonListener pauseListener;
+
     //PlayerCommands
     Move pc_Move;
     GunAttack pc_GunAttack;
@@ -15,7 +17,8 @@ public class InputHandler : MonoBehaviour
 
     //ButtonCommands
     ToggleDebug bc_Toggle;
-
+    Pause bc_Pause;
+         
     Player player;
     IButtonListener panelListener;
 
@@ -31,16 +34,20 @@ public class InputHandler : MonoBehaviour
         pc_GunAttack = new GunAttack();
         pc_SwordAttack = new SwordAttack();
         bc_Toggle = new ToggleDebug();
+        bc_Pause = new Pause();
         pc_Dash = new Dash();
         pc_Interact = new Interact();
+
+        SetCommandNames();
 
         player = GetComponent<Player>();
 
         panelListener = GameObject.FindGameObjectWithTag("DebugPanel").GetComponent<IButtonListener>();//find the listener on the debug panel
+        pauseListener = GameObject.FindGameObjectWithTag("PausePanel").GetComponent<IButtonListener>();
 
         bc_Toggle.Listener = panelListener;
+        bc_Pause.Listener = pauseListener;
 
-        SetCommandNames();
     }
 
     private void Update()
@@ -50,6 +57,7 @@ public class InputHandler : MonoBehaviour
         GunAttack();
         SwordAttack();
         ToggleDebugPanel();
+        TogglePause();
         Interact();
 
         if (shooting)
@@ -65,6 +73,7 @@ public class InputHandler : MonoBehaviour
         pc_GunAttack.Name = "Shoot";
         bc_Toggle.Name = "Toggle";
         pc_Interact.Name = "Interact";
+        bc_Pause.Name = "Pause";
     }
 
     private void ToggleDebugPanel()
@@ -72,6 +81,14 @@ public class InputHandler : MonoBehaviour
         if (Input.GetButtonDown(bc_Toggle.Name))
         {
             bc_Toggle.Execute();
+        }
+    }
+
+    private void TogglePause()
+    {
+        if (Input.GetButtonDown(bc_Pause.Name))
+        {
+            bc_Pause.Execute();
         }
     }
 
