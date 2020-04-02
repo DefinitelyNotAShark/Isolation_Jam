@@ -34,7 +34,7 @@ public class ActivateLookedAtObjects : MonoBehaviour
     private void UpdateLookedAtObjectText()
     {
         if (objectLookedAt != null)
-            lookedAtObjectText.text = objectLookedAt.NameText+ " (E)";
+            lookedAtObjectText.text = objectLookedAt.NameText+ " (X)";
         else
             lookedAtObjectText.text = "";
     }
