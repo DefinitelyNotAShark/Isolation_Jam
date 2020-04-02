@@ -31,7 +31,6 @@ public class PauseMenuManager : MonoBehaviour, IButtonListener
 
             panel.gameObject.SetActive(true);
             hidden = false;
-            Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         else
@@ -42,7 +41,6 @@ public class PauseMenuManager : MonoBehaviour, IButtonListener
             panel.gameObject.SetActive(false);
             hidden = true;
             Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 

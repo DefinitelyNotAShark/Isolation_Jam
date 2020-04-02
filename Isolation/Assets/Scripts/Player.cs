@@ -6,7 +6,6 @@ public class Player : MonoBehaviour
 {
     [HideInInspector] public Stats Stats;
    
-
     [SerializeField] private float speed = 3, dashSpeed = 6, idleDashDuration = .5f, walkingDashDuration = 1.2f;
     [SerializeField] private float startingHealth = 100, startingEnergy = 100, startingPower = 100;
     [SerializeField] private DebugScreen debugScreen;

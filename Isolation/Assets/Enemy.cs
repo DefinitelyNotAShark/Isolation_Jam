@@ -6,6 +6,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float MoveSpeed, RotationSpeed;
+    public int MinDistanceToShoot;
 
     [SerializeField][Tooltip("Angle of sight for enemy")] private float fieldOfVision = 110;
     [SerializeField][Tooltip("Maximum sight for enemy")] private int Sightdepth = 10;
@@ -20,6 +21,7 @@ public class Enemy : MonoBehaviour
     private GameObject enemyParent;
     private LayerMask player, wall;
     private Animator anim;
+   
 
     // Start is called before the first frame update
     void Start()
@@ -29,55 +31,23 @@ public class Enemy : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        screen.DisplayText("Can See player: " + DebugPlayerIsInLineOfSight(), 0);
-    }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))//if I am near player
         {
-            anim.SetBool("CanSeePlayer", PlayerIsInLineOfSight(other));
+            Debug.Log("I see the player");
+            anim.SetBool("CanSeePlayer", true);
         }
     }
 
-    private bool PlayerIsInLineOfSight(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-        Vector3 direction = other.transform.position - transform.position;
-        float angle = Vector3.Angle(direction, transform.forward);
-
-        if (angle < fieldOfVision * .5f)//player is in field of view
+        if (other.CompareTag("Player"))
         {
-            RaycastHit hit;
-
-            if (Physics.Raycast(transform.position, direction.normalized, out hit, Sightdepth))//no obstruciton between them like walls
-            {
-                if (hit.collider.CompareTag("Player"))
-                    return true;
-                else return false;
-            }
-            else return false;
+            Debug.Log("Player has left line of sight");
+            anim.SetBool("CanSeePlayer", false);
         }
-        else return false;
     }
-
-    private bool DebugPlayerIsInLineOfSight()
-    {
-        Vector3 direction = DebugPlayer.transform.position - transform.position;
-        float angle = Vector3.Angle(direction, transform.forward);
-
-        if (angle < fieldOfVision * .5f)//player is in field of view
-        {
-            if (Physics.Raycast(transform.position, direction.normalized, seeable, Sightdepth))//no obstruciton between them like walls
-            {
-                return true;
-            }
-            else return false;
-        }
-        else return false;
-    }
-
 
     public Vector3 GetPatrolPointPosition(int index)
     {

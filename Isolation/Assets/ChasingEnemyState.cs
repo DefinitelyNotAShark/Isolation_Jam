@@ -12,6 +12,7 @@ public class ChasingEnemyState : StateMachineBehaviour
     private Transform transform;
     private Vector3 playerPosition;
     private float rotationSpeed, moveSpeed;
+    private float minDistanceToShoot;
 
     private Enemy enemy;
     private int nodeIndex = 0;
@@ -28,6 +29,7 @@ public class ChasingEnemyState : StateMachineBehaviour
         transform = enemy.transform;
         rotationSpeed = enemy.RotationSpeed;
         moveSpeed = enemy.MoveSpeed;
+        minDistanceToShoot = enemy.MinDistanceToShoot;
 
         //GET PATHFINDING PROPERTIES
         pathScript = pathfindingObject.GetComponent<Pathfinding>();
@@ -43,7 +45,7 @@ public class ChasingEnemyState : StateMachineBehaviour
     {
         UpdatePoint();
 
-        if (path.Count > 1)//if the path is long enough to navigate
+        if (path.Count > minDistanceToShoot)//if the path is long enough to navigate
         {
             if (haveReachedNextNode() && nodeIndex < path.Count - 1)
                 nodeIndex++;//get new node 
@@ -59,7 +61,7 @@ public class ChasingEnemyState : StateMachineBehaviour
         else//otherwise this means we're close enough to be caught
         {
             //ATTACK
-            Debug.Log("Attack!");
+            animator.SetTrigger("Attack");
         }
     }
 

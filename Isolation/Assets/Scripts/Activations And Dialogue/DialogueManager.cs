@@ -102,12 +102,10 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueBox.DOAnchorPos(visiblePos, typingSpeed, true);
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
     }
     void CloseDialogue()
     {
         dialogueBox.DOAnchorPos(offScreenPos, typingSpeed, true);
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        ///Cursor.visible = false;
     }
 }

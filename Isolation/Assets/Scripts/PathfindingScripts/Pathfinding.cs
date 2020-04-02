@@ -19,6 +19,7 @@ public class Pathfinding : MonoBehaviour
     /// <param name="targetPosition"></param>
     public void FindPath(Vector3 startPosition, Vector3 targetPosition)
     {
+        grid.FinalPath.Clear();//always clear last path
         Node startNode = grid.GetNodeFromWorldPosition(startPosition);
         Node targetNode = grid.GetNodeFromWorldPosition(targetPosition);
 
@@ -84,7 +85,6 @@ public class Pathfinding : MonoBehaviour
 
     private void GetFinalPath(Node startNode, Node endNode)
     { 
-
         Node currentNode = endNode;
 
         while(currentNode != startNode)

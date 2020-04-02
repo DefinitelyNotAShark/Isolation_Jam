@@ -44,7 +44,7 @@ public class InventoryMenu : MonoBehaviour
         PlayerInventory = new List<InventoryObject>();
         menuItems = new List<GameObject>();
         HideMenu();
-        UpdateCursor();
+        //UpdateCursor();
     }
     // Update is called once per frame
     void Update () 
@@ -52,7 +52,7 @@ public class InventoryMenu : MonoBehaviour
         HandleInput();
 
         // It seems if you don't do this every frame, the cursor is not locked properly...
-        UpdateCursor();
+        //UpdateCursor();
     }
 
     private void HandleInput()
@@ -116,17 +116,17 @@ public class InventoryMenu : MonoBehaviour
         }
     }
 
-    private void UpdateCursor()
-    {
-        if (IsVisible)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
+    //private void UpdateCursor()
+    //{
+    //    if (IsVisible)
+    //    {
+    //        Cursor.visible = true;
+    //        Cursor.lockState = CursorLockMode.None;
+    //    }
+    //    else
+    //    {
+    //        Cursor.visible = false;
+    //        Cursor.lockState = CursorLockMode.Locked;
+    //    }
+    //}
 }
