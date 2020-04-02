@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour
     [SerializeField][Tooltip("Angle of sight for enemy")] private float fieldOfVision = 110;
     [SerializeField][Tooltip("Maximum sight for enemy")] private int Sightdepth = 10;
 
+    [SerializeField] private Transform bulletSpawnPoint;
+    private ParticleSystem shootParticles;
+
     public DebugScreen screen;
 
     public LayerMask seeable;
@@ -25,6 +28,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        shootParticles = bulletSpawnPoint.GetComponentInChildren<ParticleSystem>();
         enemyParent = transform.root.gameObject;
         patrolPoints = enemyParent.GetComponentsInChildren<PatrolPoint>();//get other objects in the same level that have the patrolpoint script
         anim = GetComponent<Animator>();
@@ -42,6 +46,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            shootParticles.Stop();
             anim.SetBool("CanSeePlayer", false);
         }
     }
@@ -54,5 +59,15 @@ public class Enemy : MonoBehaviour
     public int GetPointCount()
     {
         return patrolPoints.Length;
+    }
+
+    public void Shoot()
+    {
+        shootParticles.Play();
+    }
+
+    public void StopShoot()
+    {
+        shootParticles.Stop();
     }
 }
