@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Door : MonoBehaviour, IActivatable
 {
     [SerializeField]
     string nameText;
+    [SerializeField]float yDirection=-8f, moveDuration=1f;
 
     [Tooltip("If you set a key, the door will be locked.")]
     [SerializeField]
     InventoryObject key;
 
-    private Animator animator;
     private bool isLocked, isOpen;
     private List<InventoryObject> playerInventory;
 
@@ -46,7 +47,8 @@ public class Door : MonoBehaviour, IActivatable
         {
             if (!isLocked || HasKey)
             {
-                animator.SetBool("isDoorOpen", true); 
+                //animator.SetBool("isDoorOpen", true);
+                transform.DOMoveY(yDirection, moveDuration);
                 isOpen = true;
             }
         }
@@ -55,7 +57,6 @@ public class Door : MonoBehaviour, IActivatable
     // Use this for initialization
     void Start () 
 	{
-        animator = GetComponent<Animator>();
         playerInventory = FindObjectOfType<InventoryMenu>().PlayerInventory;
         isLocked = key != null;
 	}

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InventoryMenu : MonoBehaviour 
 {
@@ -14,9 +15,9 @@ public class InventoryMenu : MonoBehaviour
 
     [SerializeField]
     Transform inventoryItemListPanel;
-
+    
     [SerializeField]
-    Text descriptionAreaText;
+    TextMeshProUGUI descriptionAreaText;
 
     private List<GameObject> menuItems;
     private string defaultDescriptionText;
