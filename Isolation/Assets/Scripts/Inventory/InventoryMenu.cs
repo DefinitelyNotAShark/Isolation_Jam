@@ -57,7 +57,7 @@ public class InventoryMenu : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Toggle"))
         {
             if (IsVisible)
             {
