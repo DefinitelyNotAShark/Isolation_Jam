@@ -5,16 +5,24 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [HideInInspector] public Stats Stats;
-   
+
     [SerializeField] private float speed = 3, dashSpeed = 6, idleDashDuration = .5f, walkingDashDuration = 1.2f;
     [SerializeField] private float startingHealth = 100, startingEnergy = 100, startingPower = 100;
     [SerializeField] private DebugScreen debugScreen;
     [SerializeField] private GameObject bulletInstance, bulletSpawnPoint;
 
+    [SerializeField] private float blinkAmount = 10;
+    [SerializeField] private Material whiteMat, defaultMat;
+    [SerializeField] private SkinnedMeshRenderer renderer;
+    [SerializeField] private LayerMask Wall;
+
     private AudioManager audio;
     private Gun gun;
     private PlayerStateMachine state;
+    private float buffer = .3f;
+
     private bool coroutineStarted = false;
+    private bool isInvul;
 
     /// <summary>
     /// Checks if player has the energy to dash
@@ -36,10 +44,13 @@ public class Player : MonoBehaviour
         gun = GetComponentInChildren<Gun>();
     }
 
+    private bool CanMove(Vector3 dir, float distance)
+    {
+        return !Physics.Raycast(transform.position, dir, distance + buffer, Wall);//check for walls in that distance and if it's yes, return false;
+    }
+
     public void Move(float x, float y)
     {
-        debugScreen.DisplayText("Move Input: ( " + x.ToString() + ", " + y.ToString() + " )", 1);
-
         //if can rotate
         if (state.CanRotate == true)
         {
@@ -50,10 +61,13 @@ public class Player : MonoBehaviour
             if (state.CanMove == true)
             {
                 //move if there's input
-                if (moveDir != Vector3.zero)
+                if (moveDir != Vector3.zero)//can I move this amonut this direction?)
                 {
-                    transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
-                    state.SetState(State.walking);
+                    if (CanMove(moveDir, speed * Time.deltaTime))
+                    {
+                        transform.Translate(moveDir * speed * Time.deltaTime, Space.World);
+                        state.SetState(State.walking);
+                    }
                 }
                 else if (state.GetState() == State.walking)//if we were walking and now we aren't
                 {
@@ -125,6 +139,32 @@ public class Player : MonoBehaviour
     public void SwordSlash()
     {
         audio.PlaySound("Slash");
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (!isInvul)
+        {
+            Stats.DecreaseHealth(amount);//take health down
+            StartCoroutine(InvulBlink());//blink for as long as invul
+            //Play damage sound
+        }  
+    }
+
+    private IEnumerator InvulBlink()
+    {
+        isInvul = true;
+
+        for (float f = 0; f < blinkAmount; f ++)
+        {
+            renderer.material = defaultMat;
+            yield return new WaitForSeconds(.05f);
+            renderer.material = whiteMat;
+            yield return new WaitForSeconds(.05f);
+        }
+        renderer.material = defaultMat;
+
+        isInvul = false;
     }
 
     #region direction check

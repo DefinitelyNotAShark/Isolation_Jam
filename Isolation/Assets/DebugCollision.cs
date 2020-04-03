@@ -4,21 +4,35 @@ using UnityEngine;
 
 public class DebugCollision : MonoBehaviour
 {
+    [SerializeField]
+    private float enemyDamageAmount = 10;
+
+    private ParticleSystem system;
+    private ParticleCollisionEvent[] CollisionEvents;
     // Start is called before the first frame update
     void Start()
     {
-        
+        system = GetComponent<ParticleSystem>();
+        CollisionEvents = new ParticleCollisionEvent[8];
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnParticleCollision(GameObject other)
     {
-        
-    }
+        if (other.CompareTag("Player")) {
+            Player player = other.GetComponent<Player>();
 
-    private void OnParticleCollision(GameObject other)
-    {
-        if (other.CompareTag("Player"))
-            Debug.Log("Player takes damage!");
+            int collCount = system.GetSafeCollisionEventSize();
+
+            if (collCount > CollisionEvents.Length)
+                CollisionEvents = new ParticleCollisionEvent[collCount];
+
+            int eventCount = system.GetCollisionEvents(other, CollisionEvents);
+
+            for (int i = 0; i < eventCount; i++)
+            {
+                player.TakeDamage(enemyDamageAmount);//
+            }
+        }
     }
 }
+
